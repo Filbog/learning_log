@@ -20,7 +20,7 @@ web:
 disk: 512
 
 mounts:
-  'logs':
+  "logs":
     source: local
     source_path: logs
 
@@ -33,5 +33,5 @@ hooks:
     mkdir logs
     python manage.py collectstatic
     rm -rf logs
-  deploy:
+  deploy: |
     python manage.py migrate
