@@ -132,3 +132,36 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_REDIRECT_URL = "learning_logs:index"
 LOGOUT_REDIRECT_URL = "learning_logs:index"
 LOGIN_URL = "accounts:login"
+
+# Settings for deployment on platform.sh to work
+from platformshconfig import Config
+
+config = Config()
+
+# if-statement - only run the code below if this file is used on Platform.sh server
+if config.is_valid_platform():
+    # this is the host platform.sh uses
+    ALLOWED_HOSTS.append(".platformsh.site")
+
+    # If settings are being loaded in the deployed app’s directory, we set STATIC_ROOT so that
+    # static files are served correctly.
+    if config.appDir:
+        STATIC_ROOT = Path(config.appDir) / "static"
+    if config.projectEntropy:
+        # setting a more secure SECRET_KEY on a remote server apparently
+        SECRET_KEY = config.projectEntropy
+
+    # if statement - only run code below if the "build" process has finished running
+    if not config.in_build():
+        # configuring DB settings, for example changing to postgres
+        db_settings = config.credentials("database")
+        DATABASES = {
+            "default": {
+                "ENGINE": "django.db.backends.postgresql",
+                "NAME": db_settings["path"],
+                "USER": db_settings["username"],
+                "PASSWORD": db_settings["password"],
+                "HOST": db_settings["host"],
+                "PORT": db_settings["port"],
+            },
+        }
