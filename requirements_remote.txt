@@ -1,4 +1,5 @@
 # Requirements for live project.
 gunicorn
 psycopg2
+# Just leaving the 'binary' there, may be useful in the future... (hopefully not)
 # psycopg2-binary
