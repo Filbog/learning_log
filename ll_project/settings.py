@@ -142,7 +142,7 @@ config = Config()
 if config.is_valid_platform():
     # this is the host platform.sh uses
     ALLOWED_HOSTS.append(".platformsh.site")
-    # DEBUG = False
+    DEBUG = False
     # If settings are being loaded in the deployed app’s directory, we set STATIC_ROOT so that
     # static files are served correctly.
     if config.appDir:
