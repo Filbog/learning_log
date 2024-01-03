@@ -9,7 +9,9 @@ from .forms import TopicForm, EntryForm
 # Create your views here.
 def index(request):
     """Homepage for Learning Log"""
-    return render(request, "learning_logs/index.html")
+    topics = Topic.objects.filter(public=True).order_by("date_added")
+    context = {"topics": topics}
+    return render(request, "learning_logs/index.html", context)
 
 
 @login_required
@@ -24,8 +26,9 @@ def topics(request):
 def topic(request, topic_id):
     """Show single topic and all its entries"""
     topic = Topic.objects.get(id=topic_id)
-    # make sure the topic belongs to current user
-    check_topic_owner(topic, request.user)
+    # make sure the topic belongs to current user if the topic is private
+    if topic.public == False:
+        check_topic_owner(topic, request.user)
     entries = topic.entry_set.order_by("-date_added")
     context = {"topic": topic, "entries": entries}
     return render(request, "learning_logs/topic.html", context)

@@ -4,9 +4,18 @@ from .models import Topic, Entry
 
 
 class TopicForm(forms.ModelForm):
+    privacy_choices = [
+        (True, "Public"),
+        (False, "Private"),
+    ]
+
+    public = forms.ChoiceField(
+        choices=privacy_choices, widget=forms.RadioSelect, initial=False
+    )
+
     class Meta:
         model = Topic
-        fields = ["text"]
+        fields = ["text", "public"]
         labels = {"text": ""}
 
 

@@ -2,24 +2,40 @@
 
 {% block page_header %}
   <h1>{{ topic.text }}</h1>
+  {% if topic.owner != user %}
+    {% if topic.public == True %}
+      <p> By {{ topic.owner }} </p>
+    {% endif %}
+  {% else %}
+    {% if topic.public == True %}
+      <p>Public</p>
+    {% else %}
+      <p>Private</p>
+    {% endif %}
+  {% endif %}
 {% endblock page_header %}
 
 {% block content %}
+{% if user.is_authenticated and topic.owner == user %}
   <p>
     <a href="{% url 'learning_logs:new_entry' topic.id %}">Add new entry</a>
   </p>
+{% endif %}
 
   {% for entry in entries %}
      <div class="card mb-3">
       <!-- Card header with timestamp and edit link -->
        <h4 class="card-header">
         {{ entry.date_added|date:'M d, Y H:i' }}
-         <small class='ms-1'><a href="{% url 'learning_logs:edit_entry' entry.id %}"> 
-          edit entry</a></small>
+        {% if user.is_authenticated and topic.owner == user %}
+          <small class='ms-1'><a href="{% url 'learning_logs:edit_entry' entry.id %}"> 
+            edit entry</a></small>
+        {% endif %}
       </h4>
       <!-- Card body with entry text -->
        <div class="card-body">{{ entry.text|linebreaks }}</div>
     </div>
+   
   {% empty %}
      <p>There are no entries for this topic yet.</p>
   {% endfor %}

@@ -10,12 +10,11 @@
 <ul class="list-group border-bottom pb-2 mb-4">
   <div class="row">
     {% for topic in topics %}
-      <div class="col-12 col-lg-6">
+      <div class="col-12 col-xl-6">
         <li class="list-group-item border-0">
           <a href="{% url 'learning_logs:topic' topic.id %}"><h5>
             {{ topic.text }}</a>  
           </h5>
-          
         </li>
       </div>
     {% empty %}

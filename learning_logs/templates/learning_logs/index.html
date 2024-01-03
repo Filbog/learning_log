@@ -14,3 +14,20 @@
     </div>
 {% endblock page_header %}
 
+{% block content %}
+    <div class="public_topics">
+        <h3>Check out some of the public topics created by users:</h3>
+        {% for topic in topics%}
+            <div class="col-12 col-xl-6">
+                <li class="list-group-item border-0">
+                    <h5>
+                        <a href="{% url 'learning_logs:topic' topic.id %}"> {{ topic.text }}</a>  
+                    </h5>
+                    <p> - by <strong>{{ topic.owner }}</strong> </p>
+                </li>
+            </div>
+            {% empty %}
+            <li class="list-group-item border-0">No topics have been added yet.</li>
+        {% endfor %}
+    </div>
+{% endblock content %}
